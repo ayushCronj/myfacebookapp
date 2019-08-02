@@ -1,0 +1,48 @@
+#mydiv {
+    margin: 0 auto;
+    max-width: 400px;
+    margin-top: 5em;
+    border: 2px solid blue;
+    text-align: center;
+    padding: 1em;
+    border-radius: 30px;
+    background-color: #e2dcdc;
+    box-shadow: 0 0 20px #000;
+    /* margin-bottom: 23rem */
+}
+
+#mydiv2 {
+    margin: 0 auto;
+    max-width: 600px;
+    /* margin-top: 1em; */
+    border: 2px solid blue;
+    text-align: center;
+    padding: 1em;
+    border-radius: 30px;
+    background-color: #e2dcdc;
+    box-shadow: 0 0 40px #000
+}
+
+/* #mydiv3 {
+    background-color: #99634d;
+} */
+
+.error {
+    color: red;
+    font-size: 1.20rem;
+    font-weight: 200;
+}
+
+.success {
+    color: green;
+    font-size: 1.20rem;
+    font-weight: 200;
+}
+
+.button{
+    background-color: #e2dcdc;
+    border: 0.5px solid  #e2dcdc;
+    color: blue;
+    outline: none;
+    cursor: pointer;
+}
