@@ -12,6 +12,15 @@ class Landing extends Component {
             login: false,
             register: false,
             home: false,
+            redirecthome: false,
+        }
+    }
+
+    componentDidMount = () => {
+        if (sessionStorage.getItem("1") !== null) {
+            this.setState({
+                redirecthome: true
+            })
         }
     }
 
@@ -42,6 +51,9 @@ class Landing extends Component {
             return <Redirect to='/register' />
         }
 
+        if (this.state.redirecthome) {
+            return <Redirect to='/home' />
+        }
         return (
             <Layout id="mydiv3">
                 <Header>

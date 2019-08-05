@@ -11,8 +11,9 @@ class Login extends Component {
         this.state = {
             login: false,
             redirect: false,
-            email: this.props.location.state,
+            // email: this.props.location.state,
             home: false,
+            email: null
         }
     }
 
@@ -38,6 +39,7 @@ class Login extends Component {
                                         login: true,
                                         incorrectotp: false,
                                         servererror: false,
+                                        email:  this.props.location.state.email
                                     });
                                 })
                         }
@@ -78,6 +80,7 @@ class Login extends Component {
 
     render() {
         if (this.state.login) {
+            sessionStorage.setItem("1" , this.state.token)
             return <Redirect to='/home' />
         }
         if (this.state.redirect) {

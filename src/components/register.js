@@ -18,7 +18,16 @@ class Register extends Component {
             incorrect: false,
             home: false,
             login: false,
+            redirecthome1: false,
         };
+    }
+
+    componentDidMount = () => {
+        if (sessionStorage.getItem("1") !== null) {
+            this.setState({
+                redirecthome1: true
+            })
+        }
     }
 
     handleConfirmBlur = e => {
@@ -29,7 +38,7 @@ class Register extends Component {
     compareToFirstPassword = (rule, value, callback) => {
         const { form } = this.props;
         if (value && value !== form.getFieldValue('user_password')) {
-            callback('Two passwords that you enter is inconsistent!');
+            callback('Two passwords that you entered are not same!!');
         } else {
             callback();
         }
@@ -42,6 +51,16 @@ class Register extends Component {
         }
         callback();
     };
+
+    passwordcheck = (rule, value, callback) => {
+        var regex = new RegExp('(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])')
+        if (!regex.test(value) && value.length > 0) {
+            callback("Password should have atleast 1 uppercase, 1 lowercase and 1 digit")
+        }
+        else{
+            callback()
+        }
+    }
 
     handleSubmit = (e) => {
         e.preventDefault();
@@ -121,17 +140,15 @@ class Register extends Component {
         if (this.state.home) {
             return <Redirect to='/' />
         }
+        if (this.state.redirecthome1) {
+            return <Redirect to='/home' />
+        }
         if (this.state.login) {
             return <Redirect to='/main' />
         }
         return (
             <div>
                 <Layout className="layout">
-                    {/* <Header>
-                        <Icon type="facebook" onClick={this.handleclick} style={{ fontSize: "60px", color: "blue" }} />
-                        <Icon type="login" onClick={this.handleclick} style={{ fontSize: "60px", color: "blue" }} />
-                    </Header> */}
-
                     <Header>
                         <div className="logo" />
                         <Menu
@@ -142,8 +159,6 @@ class Register extends Component {
                             <Menu.Item> <Icon type="facebook" onClick={this.handleclick} style={{ fontSize: "60px", color: "blue" }} /></Menu.Item>
                             <Menu.Item ><Icon type="login" onClick={this.loginclicked} style={{ fontSize: "60px", color: "blue" }} /></Menu.Item>
                         </Menu>
-                        {/* <Icon type="facebook" onClick={this.handleclick} style={{ fontSize: "60px", color: "blue" }} />
-                        <Icon type="login" onClick={this.handleclick} style={{ fontSize: "60px", color: "blue" }} /> */}
                     </Header>
 
                     <Content style={{ backgroundColor: "white" }}>
@@ -181,6 +196,9 @@ class Register extends Component {
                                                     validator: this.validateToNextPassword,
                                                 },
                                                 {
+                                                    validator: this.passwordcheck
+                                                },
+                                                {
                                                     min: 8,
                                                     message: "Password should be atleast 8 characters long",
                                                 }
@@ -197,10 +215,10 @@ class Register extends Component {
                                                 {
                                                     validator: this.compareToFirstPassword,
                                                 },
-                                                {
-                                                    min: 8,
-                                                    message: "Password should be atleast 8 characters long",
-                                                }
+                                                // {
+                                                //     min: 8,
+                                                //     message: "Password should be atleast 8 characters long",
+                                                // }
                                             ],
                                         })(<Input.Password prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
                                             onBlur={this.handleConfirmBlur} placeholder="Confirm Password" />)}

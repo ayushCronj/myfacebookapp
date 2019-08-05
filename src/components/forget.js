@@ -28,7 +28,7 @@ class Forget extends Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                console.log(sessionStorage.getItem(values.email));
+                // console.log(sessionStorage.getItem(values.email));
                 fetch('http://localhost:3002/api/users/forgetpass/' + values.email ,
                 {
                     method: 'GET',
@@ -191,7 +191,7 @@ class Forget extends Component {
     compareToFirstPassword = (rule, value, callback) => {
         const { form } = this.props;
         if (value && value !== form.getFieldValue('password')) {
-            callback('Two passwords that you enter is inconsistent!');
+            callback('Two passwords that you entered are not same!!');
         } else {
             callback();
         }
@@ -223,6 +223,16 @@ class Forget extends Component {
             incorrect: false,
             servererror: false,
         })
+    }
+
+    passwordcheck = (rule, value, callback) => {
+        var regex = new RegExp('(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])')
+        if (!regex.test(value) && value.length > 0) {
+            callback("Password should have atleast 1 uppercase, 1 lowercase and 1 digit ")
+        }
+        else{
+            callback()
+        }
     }
 
     render() {
@@ -310,6 +320,9 @@ class Forget extends Component {
                                                 validator: this.validateToNextPassword,
                                             },
                                             {
+                                                validator: this.passwordcheck,
+                                            },
+                                            {
                                                 min: 8,
                                                 message: "Password should be atleast 8 characters long",
                                             }
@@ -327,10 +340,10 @@ class Forget extends Component {
                                             {
                                                 validator: this.compareToFirstPassword,
                                             },
-                                            {
-                                                min: 8,
-                                                message: "Password should be atleast 8 characters long",
-                                            }
+                                            // {
+                                            //     min: 8,
+                                            //     message: "Password should be atleast 8 characters long",
+                                            // }
                                         ],
                                     })(<Input.Password prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
                                         onBlur={this.handleConfirmBlur} placeholder="Confirm New Password" />)}

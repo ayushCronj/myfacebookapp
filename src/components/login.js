@@ -21,7 +21,16 @@ class Login extends Component {
             back: false,
             forget: false,
             register: false,
-            token: null
+            token: null,
+            redirecthome1: false
+        }
+    }
+
+    componentDidMount = () => {
+        if (sessionStorage.getItem("1") !== null) {
+            this.setState({
+                redirecthome1: true
+            })
         }
     }
 
@@ -117,23 +126,31 @@ class Login extends Component {
 
     loginclicked = () => {
         this.setState({
-            forget: true, 
+            forget: true,
         })
     }
 
     registerclicked = () => {
         this.setState({
-            register: true, 
+            register: true,
         })
     }
 
     render() {
         if (this.state.redirecthome) {
-            sessionStorage.setItem(this.state.email , this.state.token)
-            return <Redirect to='/home' />
+            var obj = {
+                email: this.state.email,
+                token: this.state.token
+            }
+            sessionStorage.setItem("1" , this.state.token)
+            // console.log(sessionStorage.getItem("1"));
+            return <Redirect to={{ pathname: '/home', state: { email: this.state.email } }} />
         }
         if (this.state.redirectotp) {
             return <Redirect to={{ pathname: '/otpverify', state: { email: this.state.email } }} />
+        }
+        if (this.state.redirecthome1) {
+            return <Redirect to='/home' />
         }
         if (this.state.back) {
             return <Redirect to='/' />
@@ -147,7 +164,7 @@ class Login extends Component {
         const { getFieldDecorator } = this.props.form;
         return (
             <Layout>
-                                <Header>
+                <Header>
                     <div className="logo" />
                     <Menu
                         theme="dark"
@@ -195,7 +212,7 @@ class Login extends Component {
                                         },
                                     ],
                                 })(
-                                    <Input
+                                    <Input.Password
                                         prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
                                         type="password"
                                         placeholder="Password"
@@ -213,7 +230,7 @@ class Login extends Component {
                                     <Icon type="login"></Icon>  Log in
                                 </Button>
                                 <br />
-                                Or <button onClick={this.registerclicked} className="button"><u> Register Now..!! </u></button> 
+                                Or <button onClick={this.registerclicked} className="button"><u> Register Now..!! </u></button>
                                 {/* <a href="/register">Register now..!!</a> */}
                             </Form.Item>
                         </Form>

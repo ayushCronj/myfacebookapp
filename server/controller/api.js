@@ -22,7 +22,7 @@ opts.secretOrKey = 'whisperers';
 passport.use(new JwtStrategy(opts, function(jwt_payload, done) {
     // console.log(jwt_payload);
     services.findID(jwt_payload.id).then((result) => {
-        console.log(result.rows[0]);
+        // console.log(result.rows[0]);
             if(result.rowCount === 1) {
                 return done(null, result.rows[0])
             }
@@ -34,6 +34,10 @@ passport.use(new JwtStrategy(opts, function(jwt_payload, done) {
     })
 })
 )
+
+exports.homepage = function (req,res) {
+    res.send("hi");
+}
 
 
 //register user
@@ -109,7 +113,17 @@ exports.verifyUser = function (req, res) {
         }
         else {
             services.updateStatus(req.params.email).then((result) => {
-                res.send(result);
+                var payload = {
+                    id: result.rows[0].user_id
+                };
+                console.log(payload);
+                const token = jwt.sign(payload, config.jwtSecret);
+                console.log(token);
+                res.json({
+                    token: token,
+                    message: "Redirect Home"
+                });
+                // res.send(result);
                 //jwt 
             })
         }
