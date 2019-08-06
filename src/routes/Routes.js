@@ -9,6 +9,8 @@ import Home from '../components/home'
 import OTPverify from '../components/otpverify'
 import Landing from '../components/landing'
 import NotFound from '../components/notfound'
+import Profile from '../components/profile'
+import Friend from '../components/friend' 
 
 const Root = ({ store }) => (
   <Provider store={store}>
@@ -20,6 +22,8 @@ const Root = ({ store }) => (
       <Route exact path="/forget" component={Forget} />
       <Route exact path='/home' component={Home} />
       <Route exact path='/otpverify' component={OTPverify} />
+      <Route exact path='/profile' component={Profile} />
+      <Route exact path='/friendlist' component={Friend} />
       <Route path="*" component={NotFound} />
       </Switch>
     </Router>

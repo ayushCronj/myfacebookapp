@@ -57,15 +57,16 @@ class Register extends Component {
         if (!regex.test(value) && value.length > 0) {
             callback("Password should have atleast 1 uppercase, 1 lowercase and 1 digit")
         }
-        else{
+        else {
             callback()
         }
     }
 
     handleSubmit = (e) => {
         e.preventDefault();
+        // && this.state.incorrectuser === false
         this.props.form.validateFields((err, values) => {
-            if (!err && this.state.incorrectuser === false) {
+            if (!err ) {
                 values.dob = moment(values.dob).format("YYYY-MM-DD")
                 fetch('http://localhost:3002/api/users/register', {
                     method: 'POST',
@@ -146,6 +147,11 @@ class Register extends Component {
         if (this.state.login) {
             return <Redirect to='/main' />
         }
+
+        function disabledDate(current) {
+            return current && current.valueOf() >= Date.now();
+        }
+
         return (
             <div>
                 <Layout className="layout">
@@ -156,8 +162,8 @@ class Register extends Component {
                             mode="horizontal"
                             style={{ lineHeight: '64px' }}
                         >
-                            <Menu.Item> <Icon type="facebook" onClick={this.handleclick} style={{ fontSize: "60px", color: "blue" }} /></Menu.Item>
-                            <Menu.Item ><Icon type="login" onClick={this.loginclicked} style={{ fontSize: "60px", color: "blue" }} /></Menu.Item>
+                            <Menu.Item> <Icon type="facebook" onClick={this.handleclick} style={{ fontSize: "50px", color: "blue" }} /></Menu.Item>
+                            <Menu.Item ><Icon type="login" onClick={this.loginclicked} style={{ fontSize: "50px", color: "blue" }} /></Menu.Item>
                         </Menu>
                     </Header>
 
@@ -166,7 +172,7 @@ class Register extends Component {
                             <br />
                             <br />
                             <div id="mydiv2">
-                                <h2 style={{ color: "blue" }}> <u> Enter Details </u></h2>
+                                <h2 style={{ color: "blue" }}> <u> Create Your Account </u></h2>
                                 <Form onSubmit={this.handleSubmit}>
                                     <Form.Item label="E-mail">
                                         {getFieldDecorator('user_email', {
@@ -245,7 +251,8 @@ class Register extends Component {
                                                     message: 'Please input your Date of Birth!',
                                                 },
                                             ],
-                                        })(<DatePicker placeholder="Select DOB" format="YYYY-MM-DD" />)}
+                                        })(<DatePicker disabledDate={disabledDate}
+                                            placeholder="Select DOB" format="YYYY-MM-DD" />)}
                                     </Form.Item>
                                     <Form.Item >
                                         <Button type="primary" htmlType="submit">

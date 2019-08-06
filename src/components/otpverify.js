@@ -13,7 +13,8 @@ class Login extends Component {
             redirect: false,
             // email: this.props.location.state,
             home: false,
-            email: null
+            email: null,
+            token: null,
         }
     }
 
@@ -39,7 +40,8 @@ class Login extends Component {
                                         login: true,
                                         incorrectotp: false,
                                         servererror: false,
-                                        email:  this.props.location.state.email
+                                        email:  this.props.location.state.email,
+                                        token: result.token
                                     });
                                 })
                         }
@@ -80,7 +82,12 @@ class Login extends Component {
 
     render() {
         if (this.state.login) {
-            sessionStorage.setItem("1" , this.state.token)
+            var obj = {
+                'email': this.state.email,
+                'token': this.state.token
+            }
+            sessionStorage.setItem('1', JSON.stringify(obj));
+            // sessionStorage.setItem("1" , this.state.token)
             return <Redirect to='/home' />
         }
         if (this.state.redirect) {
@@ -99,7 +106,7 @@ class Login extends Component {
                         mode="horizontal"
                         style={{ lineHeight: '64px' }}
                     >
-                        <Menu.Item> <Icon type="facebook" onClick={this.handleclick} style={{ fontSize: "60px", color: "blue" }} /></Menu.Item>
+                        <Menu.Item> <Icon type="facebook" onClick={this.handleclick} style={{ fontSize: "50px", color: "blue" }} /></Menu.Item>
                     </Menu>
                 </Header>
                 <Content style={{ backgroundColor: "white" }}>

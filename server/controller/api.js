@@ -19,26 +19,41 @@ var transporter = nodemailer.createTransport({
 var opts = {}
 opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
 opts.secretOrKey = 'whisperers';
-passport.use(new JwtStrategy(opts, function(jwt_payload, done) {
-    // console.log(jwt_payload);
+passport.use(new JwtStrategy(opts, function (jwt_payload, done) {
+    console.log(jwt_payload);
     services.findID(jwt_payload.id).then((result) => {
-        // console.log(result.rows[0]);
-            if(result.rowCount === 1) {
-                return done(null, result.rows[0])
-            }
-            else {
-                return done(null,false)
-            }
-    }).catch((err)=> {
-        return done(err,false)
+        console.log(result.rows[0]);
+        if (result.rowCount === 1) {
+            return done(null, result.rows[0])
+        }
+        else {
+            return done(null, false)
+        }
+    }).catch((err) => {
+        return done(err, false)
     })
 })
 )
 
-exports.homepage = function (req,res) {
-    res.send("hi");
+//home api
+exports.homepage = function (req, res) {
+    // console.log("Hi")
+    // console.log(req);
+    services.allPosts(req.user.user_id).then((result) => {
+        // console.log(result.rows);
+        res.send(result.rows)
+    })
 }
 
+//updateapi 
+exports.update = function (req, res) {
+    // console.log("Hello")
+    // console.log(req);
+    services.allPosts(req.user.user_id).then((result) => {
+        // console.log(result.rows);
+        res.send(result.rows)
+    })
+}
 
 //register user
 exports.registerUser = function (req, res) {
@@ -47,7 +62,7 @@ exports.registerUser = function (req, res) {
         from: 'ayush@cronj.com',
         to: req.body.values.user_email,
         subject: 'My facebook App Registration OTP',
-        html: '<p>Your OTP is : ' + otp + '</p>'
+        html: '<h2> Welcome to My Facebook App..!!! </h2> <br /> <br /> <p> Your OTP is : ' + otp + '</p><br /><br /> <p> For any clarification/queries contact undersigned </p>'
     };
     services.findEmail(req.body.values.user_email).then((result) => {
         if (result.rowCount === 0) {
@@ -195,7 +210,7 @@ exports.forgetOtp = function (req, res) {
     })
 }
 
-//change password
+//change password when forgotten
 exports.changePass = function (req, res) {
     bcrypt.hash(req.params.pass, saltRounds).then(function (hash) {
         services.changePass(req.params.email, hash).then((result) => {
@@ -206,4 +221,59 @@ exports.changePass = function (req, res) {
     }).catch((err) => {
         res.status(500).send(err);
     })
+}
+
+//change password
+exports.changePass1 = function (req, res) {
+    let password = null;
+    // console.log(req.user.user_id);
+    services.findEmail(req.params.email).then((result) => {
+        password = result.rows[0].user_password;
+        bcrypt.compare(req.params.passold, password, function (err, res1) {
+            if (res1) {
+                bcrypt.hash(req.params.passnew, saltRounds).then(function (hash) {
+                    services.changePass(req.params.email, hash).then((result) => {
+                        res.send(result);
+                    }).catch((err) => {
+                        res.status(500).send(err);
+                    })
+                })
+            }
+            else {
+                res.status(404).send("Incorrect Password")
+            }
+        }
+        )
+    }
+    ).catch((err) => {
+        res.status(500).send(err);
+    })
+}
+
+//add post
+exports.addPost = function (req, res) {
+    services.addPost(req.user.user_id, req.user.user_name, req.params.content).then((result) => {
+        if (result.rowCount === 1) {
+            res.send("Added")
+        }
+    }).catch((err) => {
+        res.status(500).send(err);
+    })
+}
+
+exports.likePost = function (req, res) {
+    if (req.params.type === "true") {
+        services.likePost(req.params.postid).then((result) => {
+            res.send(result)
+        }).catch((err) => {
+            res.status(500).send(err);
+        })
+    }
+    else if (req.params.type === "false") {
+        services.dislikePost(req.params.postid).then((result) => {
+            res.send(result)
+        }).catch((err) => {
+            res.status(500).send(err);
+        })
+    }
 }

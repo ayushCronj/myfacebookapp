@@ -139,11 +139,10 @@ class Login extends Component {
     render() {
         if (this.state.redirecthome) {
             var obj = {
-                email: this.state.email,
-                token: this.state.token
+                'email': this.state.email,
+                'token': this.state.token
             }
-            sessionStorage.setItem("1" , this.state.token)
-            // console.log(sessionStorage.getItem("1"));
+            sessionStorage.setItem('1', JSON.stringify(obj));
             return <Redirect to={{ pathname: '/home', state: { email: this.state.email } }} />
         }
         if (this.state.redirectotp) {
@@ -171,7 +170,7 @@ class Login extends Component {
                         mode="horizontal"
                         style={{ lineHeight: '64px' }}
                     >
-                        <Menu.Item> <Icon type="facebook" onClick={this.handleclick} style={{ fontSize: "60px", color: "blue" }} /></Menu.Item>
+                        <Menu.Item> <Icon type="facebook" onClick={this.handleclick} style={{ fontSize: "50px", color: "blue" }} /></Menu.Item>
                     </Menu>
                 </Header>
                 <Content style={{ backgroundColor: "white", textAlign: "center" }}>

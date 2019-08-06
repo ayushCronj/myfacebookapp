@@ -29,15 +29,15 @@ class Forget extends Component {
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 // console.log(sessionStorage.getItem(values.email));
-                fetch('http://localhost:3002/api/users/forgetpass/' + values.email ,
-                {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': 'bearer ' + sessionStorage.getItem(values.email),
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json',
-                    },
-                }).then(response => {
+                fetch('http://localhost:3002/api/users/forgetpass/' + values.email,
+                    {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': 'bearer ' + sessionStorage.getItem(values.email),
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json',
+                        },
+                    }).then(response => {
                         if (response.status === 200) {
                             response.text().then((result) => {
                                 if (result === "Redirect Change") {
@@ -230,7 +230,7 @@ class Forget extends Component {
         if (!regex.test(value) && value.length > 0) {
             callback("Password should have atleast 1 uppercase, 1 lowercase and 1 digit ")
         }
-        else{
+        else {
             callback()
         }
     }
@@ -255,8 +255,8 @@ class Forget extends Component {
                         mode="horizontal"
                         style={{ lineHeight: '64px' }}
                     >
-                        <Menu.Item> <Icon type="facebook" onClick={this.handleclick1} style={{ fontSize: "60px", color: "blue" }} /></Menu.Item>
-                        <Menu.Item ><Icon type="login" onClick={this.handleclick} style={{ fontSize: "60px", color: "blue" }} /></Menu.Item>
+                        <Menu.Item> <Icon type="facebook" onClick={this.handleclick1} style={{ fontSize: "50px", color: "blue" }} /></Menu.Item>
+                        <Menu.Item ><Icon type="login" onClick={this.handleclick} style={{ fontSize: "50px", color: "blue" }} /></Menu.Item>
                     </Menu>
                 </Header>
                 <Content style={{ backgroundColor: "white" }}>
@@ -264,6 +264,7 @@ class Forget extends Component {
                         <br />
                         {this.state.buttonclicked === false && this.state.verifiedclick === false ?
                             <div>
+                                <h2 style={{ color: "blue" }}> <u> Forgot Password </u></h2>
                                 <Form onSubmit={this.handleSubmit}>
                                     <Form.Item label="E-mail">
                                         {getFieldDecorator('email', {
@@ -287,6 +288,7 @@ class Forget extends Component {
 
                         {this.state.buttonclicked === true ?
                             <Form onSubmit={this.handleSubmit1}>
+                                <h2 style={{ color: "blue" }}> <u> Enter OTP..!!</u></h2>
                                 <Form.Item label="OTP">
                                     {getFieldDecorator('otp', {
                                         rules: [
